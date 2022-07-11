@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Moq;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using UnitTest.App;
@@ -9,9 +10,11 @@ namespace XUnitTest.Test
     public class CalculatorTest
     {
         public Calculator calculator { get; set; }
+        public Mock<ICalculatorService> mymock { get; set; }
         public CalculatorTest()
         {
-            this.calculator = new Calculator();
+            mymock = new Mock<ICalculatorService>();
+            this.calculator = new Calculator(mymock.Object);
         }
 
         #region Old
@@ -49,20 +52,45 @@ namespace XUnitTest.Test
         [Theory]
         [InlineData(5, 5, 10)]
         [InlineData(10, 10, 20)]
-        public void Add_SimpleValues_ReturnTotalValue(int a, int b, int ExpectedTotal)
+        public void Add_SimpleValues_ReturnsTotalValue(int a, int b, int ExpectedTotal)
         {
+            mymock.Setup(x => x.Add(a, b)).Returns(ExpectedTotal);
+
             var actualData = calculator.Add(a, b);
 
             Assert.Equal(ExpectedTotal, actualData);
+            mymock.Verify(x => x.Add(a, b), Times.Once);
         }
+
         [Theory]
         [InlineData(0, 5, 0)]
         [InlineData(10, 0, 0)]
-        public void Add_ZeroValues_ReturnZeroValue(int a, int b, int ExpectedTotal)
+        public void Add_ZeroValues_ReturnsZeroValue(int a, int b, int ExpectedTotal)
         {
             var actualData = calculator.Add(a, b);
-
             Assert.Equal(ExpectedTotal, actualData);
+        }
+
+        [Theory]
+        [InlineData(8, 8, 64)]
+        public void Multip_SimpleValues_ReturnsMultipValue(int a, int b, int expectedValue)
+        {
+            int actualMultip = 0;
+            mymock.Setup(x => x.Multip(It.IsAny<int>(), It.IsAny<int>())).Callback<int, int>((x, y) => actualMultip = x * y);
+            calculator.Multip(a, b);
+
+            Assert.Equal(expectedValue, calculator.Multip(a, b));
+            calculator.Multip(5, 5);
+            Assert.Equal(25, actualMultip);
+        }
+
+        [Theory]
+        [InlineData(0, 5)]
+        public void Multip_ZeroValues_ReturnsException(int a, int b)
+        {
+            mymock.Setup(x => x.Multip(a, b)).Throws(new Exception("a=0 olamaz"));
+            Exception exception = Assert.Throws<Exception>(() => calculator.Multip(a, b));
+            Assert.Equal("a=0 olamaz", exception.Message);
         }
     }
 }
