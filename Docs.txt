@@ -2,3 +2,6 @@ Mock Nedir ?
 class veya interfacelerimizin davranýþlarýný taklit etmemize imkan veren objelerdir test içerisindeki kodlarýn gerçek dünyada gibi çalýþmasýný gerçekleþtirebiliriz.
 çok uzun sürecek metotlarýmýzý taklit ederek farklý davranmasýný saðlayabiliyoruz.
 Proje soyut (abstraction) ve DI (dependency injection) olmasý gerek
+
+
+scaffold-DbContext "Data Source=DESKTOP-LE4JRTE;Initial Catalog=XUnitTestWebDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False" Microsoft.EntityframeworkCore.SqlServer -OutputDir Models
