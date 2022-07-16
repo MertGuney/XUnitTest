@@ -5,3 +5,5 @@ Proje soyut (abstraction) ve DI (dependency injection) olmasý gerek
 
 
 scaffold-DbContext "Data Source=DESKTOP-LE4JRTE;Initial Catalog=XUnitTestWebDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False" Microsoft.EntityframeworkCore.SqlServer -OutputDir Models
+
+dotnet test (powershall)
